@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <menuitem id="menu_task_main" name="TaskMS" sequence="136"/>
-    <menuitem id="menu_frontdesk" name="Front Desk" parent="menu_task_main"/>
-    <menuitem id="menu_tasks" name="Tasks" parent="menu_frontdesk" action="action_task_list"/>
-</odoo>
