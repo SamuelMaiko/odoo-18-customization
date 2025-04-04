@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- the List view for vendor mapping -->
+    <record id="view_purchase_order_vendor_list" model="ir.ui.view">
+        <field name="name">purchase.order.vendor.list</field>
+        <field name="model">purchase.order.vendor</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="vendor_id"/>
+                <field name="status"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- overriding the default purchase order form -->
+    <record id="view_purchase_order_form_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Removing the default vendor field -->
+            <xpath expr="//field[@name='partner_id']" position="replace"/>
+
+            <!-- Adding the vendors field -->
+            <xpath expr="//field[@name='date_order']" position="before">
+                <field name="vendor_ids" required="1">
+                    <list>
+                        <field name="vendor_id" required="1"/>
+                        <field name="status"/>
+                    </list>
+                </field>
+            </xpath>
+
+            <!-- warning message -->
+            <xpath expr="//field[@name='vendor_ids']" position="after">
+                <div class="alert alert-warning oe_text_center"
+                     invisible="not bool(vendor_ids)">
+                    <i class="fa fa-exclamation-triangle"/>
+                    At least one vendor must be selected before confirming the order
+                </div>
+            </xpath>
+        </field>
+
+
+    </record>
+
+    <record id="view_purchase_order_form_inherit_bid" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.bid</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add a new tab for Bids -->
+            <xpath expr="//sheet/notebook" position="inside">
+                <page string="Bids">
+                    <field name="bid_ids">
+                        <list editable="bottom">
+                            <field name="vendor_id"/>
+                            <field name="price"/>
+                            <field name="selected"/>
+                            <button name="action_select_bid" string="Select" type="object"
+                                    attrs="{'invisible': [('selected', '=', True)]}"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
