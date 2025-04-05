@@ -32,11 +32,22 @@
         <field name="arch" type="xml">
             <form string="Purchase Request">
             <header>
-                <button name="action_approve" type="object" string="Approve" class="btn btn-primary"
+                <button name="action_approve"
+                        type="object"
+                        string="Approve"
+                        class="btn btn-primary"
+                        groups="purchase_request.group_procurement_approver"
                         invisible="state != 'draft'"/>
-                <button name="action_reject" type="object" string="Reject" class="btn btn-danger"
+                <button name="action_reject"
+                        type="object"
+                        string="Reject"
+                        class="btn btn-danger"
+                        groups="purchase_request.group_procurement_approver"
                         invisible="state != 'draft'"/>
-                <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+                <button string="Cancel"
+                        class="btn btn-secondary"
+                        groups="purchase_request.group_procurement_approver"
+                        special="cancel"/>
             </header>
                 <sheet>
                     <group>

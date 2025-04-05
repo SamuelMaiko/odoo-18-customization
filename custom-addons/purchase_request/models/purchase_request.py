@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _
+from odoo.exceptions import AccessError
 
 
 class PurchaseRequest(models.Model):
@@ -21,10 +22,14 @@ class PurchaseRequest(models.Model):
 
     # Actions
     def action_approve(self):
+        if not self.env.user.has_group('purchase_request.group_procurement_approver'):
+            raise AccessError("Only procurement approvers can approve purchase requests.")
         self.write({'state': 'approved'})
         self.create_rfq()
 
     def action_reject(self):
+        if not self.env.user.has_group('purchase_request.group_procurement_approver'):
+            raise AccessError("Only procurement approvers can reject purchase requests.")
         self.write({'state': 'rejected'})
 
     def create_rfq(self):

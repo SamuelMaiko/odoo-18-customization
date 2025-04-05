@@ -1,0 +1,14 @@
+<odoo>
+<!--    creating a new category to add the group -->
+    <record id="module_category_purchase_request" model="ir.module.category">
+        <field name="name">Purchase Requests</field>
+        <field name="description">Access rights for purchase requests</field>
+        <field name="sequence">30</field>
+    </record>
+<!--adding the group to allow only procurement department employees to approve, reject and cancel purchase requests-->
+    <record id="group_procurement_approver" model="res.groups">
+        <field name="name">Procurement Approver</field>
+        <field name="category_id" ref="purchase_request.module_category_purchase_request"/>
+    </record>
+</odoo>
+
