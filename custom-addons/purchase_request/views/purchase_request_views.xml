@@ -45,6 +45,7 @@
                         <field name="department_id" readonly="1"/>
                         <field name="date_requested"/>
                         <field name="state" readonly="1"/>
+                        <field name="rfq_id" widget="many2one" options="{'no_create': True}" string="Related RFQ"/>
                     </group>
 
                     <notebook>
