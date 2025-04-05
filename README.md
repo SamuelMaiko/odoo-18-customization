@@ -1,41 +1,56 @@
-# Multi Vendor RFQ & Purchase Request Modules
+# 🛠️ Odoo 18 Custom Purchase Workflow
 
-## Overview  
-This repository contains two Odoo modules that extend the procurement workflow:  
-
-1. **Multi Vendor RFQ** - Enhances the existing **Purchases** module to support multi-vendor RFQs, bidding, and purchase order selection.  
-2. **Purchase Request** - A standalone installable module that allows employees to submit purchase requests, which the procurement team can convert into RFQs.  
+This project contains custom Odoo 18 modules for extending the Purchase workflow — including support for multi-vendor RFQs, bid submissions, winner selection, and employee purchase requests.
 
 ---
 
-## 📌 Multi Vendor RFQ
 
-### Features  
-- Allows **RFQs to be sent to multiple vendors** instead of just one.  
-- Vendors can **submit bids** for the RFQs they receive.  
-- One-to-many relationship between an **RFQ and supplier bids**.  
-- Procurement team can **select the winning bid**, triggering automatic **Purchase Order (PO) creation**.  
+## 🧱 Requirements
 
-### Installation & Testing  
-1. Ensure the **Purchases** module is installed.  
-2. Install the **Multi Vendor RFQ** module via **Apps**.  
-3. **Upgrade** the module after installation.  
-4. Create an RFQ and **assign multiple vendors**.  
-5. Submit bids as different vendors.  
-6. Select a **winning bid** and verify that a **PO is generated**.  
+- ✅ **Ubuntu 24.04** / **Kubuntu**
+- ✅ **PostgreSQL ≥ 15**
+- ✅ **Python 3**
+- ✅ [Odoo 18 source code](https://github.com/odoo/odoo/archive/18.0.zip)
+- ✅ (Optional) **Docker** — if using Docker for postgres instance, make sure to configure your database IP (like `172.18.0.2`). You can find it using:
+  
+  ```bash
+  docker inspect <container_name> | grep IPAddress
+    ```
+## 📦 Folder Structure
 
----
+- `custom-addons` and `conf` folder - download from the archive of this repo
+- `odoo-18.0` - can be any name, the Odoo instance you downloaded above (from requirements above)
 
-## 📌 Purchase Request
+![My Image](readme-images/folder-structure.png)
 
-### Features  
-- Employees can submit **purchase requests** to the Procurement department.  
-- Approved requests are used to generate **RFQs** in the **Multi Vendor RFQ** module.  
+## 🛠️ Setup Instructions
+With the requirements in 
 
-### Installation & Testing  
-1. Install the **Purchase Request** module via **Apps**.  
-2. Log in as an **employee** and submit a **purchase request**.  
-3. Log in as **procurement staff**, review, and approve the request.  
-4. Verify that an **RFQ is created** based on the request.  
+1. **Set up the database**  
+   Ensure PostgreSQL is installed. Use the credentials of your user to update the credentials in `conf/odoo.conf`.
+2. **Update addons path** in `conf/odoo.conf`:
+   ```ini
+   addons_path = /path/to/odoo-18.0/addons, /path/to/odoo-18.0/odoo/addons, /path/to/custom_addons
+    ```
+3. **Install Python requirements** (if needed):
+   ```bash
+   pip install -r /path/to/odoo-18.0/requirements.txt
+    ```
+4. **Run Odoo with custom config**  
+   From the project root directory:
 
----
+   ```bash
+   python3 /path/to/odoo-18.0/odoo-bin -c conf/odoo.conf
+    ```
+   
+    ✅ Tip: You can use relative paths if possible, e.g.:
+    ```bash
+   python3 ../odoo-18.0/odoo-bin -c conf/odoo.conf
+    ```
+5. **Visit Odoo in your browser**  
+   After running the command, you can access the Odoo platform on your local machine by visiting [http://localhost:8001](http://localhost:8001).  
+   If you wish, you can modify the port in `conf/odoo.conf` under the `http_port` option.
+
+## Tip
+ **Set up with PyCharm**  
+   If you'd like to set up the project with PyCharm, you can follow the steps in this [YouTube tutorial](https://youtu.be/fbEsjurG7sQ?si=PqhGt7lVRbtJXvYM).
