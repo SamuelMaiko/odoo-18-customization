@@ -4,6 +4,16 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+
+             <!-- Hide the partner_id field from the form -->
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- Hide the partner_ref field from the form -->
+            <xpath expr="//field[@name='partner_ref']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <xpath expr="//field[@name='date_order']" position="before">
                 <field name="vendor_reference_ids" widget="one2many_list" required="1">
                     <list>
