@@ -1,2 +1,2 @@
 from . import purchase_order
-# from . import vendor_reference
+from . import vendor_reference

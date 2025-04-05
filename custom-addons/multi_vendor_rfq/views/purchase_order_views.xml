@@ -5,7 +5,12 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='date_order']" position="before">
-                <field name="vendor_ids" widget="many2many_tags" required="1" placeholder="Select vendors"/>
+                <field name="vendor_reference_ids" widget="one2many_list" required="1">
+                    <list>
+                        <field name="vendor_id"/>
+                        <field name="reference"/>
+                    </list>
+                </field>
             </xpath>
         </field>
     </record>

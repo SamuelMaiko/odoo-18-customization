@@ -6,7 +6,7 @@
     'author': 'Samuel Maiko',
     'depends': ['purchase','mail'],
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/purchase_order_views.xml',
     ],
     'installable': True,
