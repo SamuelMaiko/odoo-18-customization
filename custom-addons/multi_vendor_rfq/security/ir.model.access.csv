@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_purchase_order_vendor,purchase.order.vendor,model_purchase_order_vendor,base.group_user,1,1,1,1
-access_purchase_order_bid,purchase.order.bid,model_purchase_order_bid,base.group_user,1,1,1,1
