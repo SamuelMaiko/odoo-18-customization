@@ -1,53 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_purchase_request_tree" model="ir.ui.view">
-        <field name="name">purchase.request.tree</field>
-        <field name="model">purchase.request</field>
-        <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
-                <field name="employee_id"/>
-                <field name="date_request"/>
-                <field name="state"/>
-            </list>
-        </field>
-    </record>
+        <menuitem
+                id="purchase_request_menu"
+                parent="purchase.menu_purchase_root"
+                name="Purchase Requests"
+                sequence="6"
+                action="purchase_request_action"
+                groups="base.group_user"
+        />
+
+<!--        the list view -->
+        <record id="view_purchase_request_list" model="ir.ui.view">
+            <field name="name">purchase.request.list</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <list>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="date_requested"/>
+                    <field name="state"/>
+                </list>
+            </field>
+        </record>
+
+<!--    the form view -->
 
     <record id="view_purchase_request_form" model="ir.ui.view">
         <field name="name">purchase.request.form</field>
         <field name="model">purchase.request</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Purchase Request">
+            <header>
+                <button name="action_approve" type="object" string="Approve" class="btn btn-primary"
+                        invisible="state != 'draft'"/>
+                <button name="action_reject" type="object" string="Reject" class="btn btn-danger"
+                        invisible="state != 'draft'"/>
+                <button string="Cancel" class="btn btn-secondary" special="cancel"/>
+            </header>
                 <sheet>
                     <group>
-                        <field name="name" readonly="1"/>
+                        <field name="name"/>
                         <field name="employee_id"/>
-                        <field name="department_id"/>
-                        <field name="date_request"/>
+                        <field name="department_id" readonly="1"/>
+                        <field name="date_requested"/>
                         <field name="state" readonly="1"/>
                     </group>
+
                     <notebook>
-                        <page string="Purchase Items">
-                            <field name="line_ids">
+                        <page string="Products">
+                            <field name="product_ids">
                                 <list editable="bottom">
                                     <field name="product_id"/>
                                     <field name="quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="total_price" readonly="1"/>
                                 </list>
                             </field>
                         </page>
                     </notebook>
+
+
                 </sheet>
-                <footer>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved,rfq_created"/>
-                    <button name="action_submit" type="object" string="Submit" class="oe_highlight"/>
-                    <button name="action_approve" type="object" string="Approve" class="oe_highlight"/>
-                    <button name="action_create_rfq" type="object" string="Create RFQ" class="oe_highlight" />
-                </footer>
             </form>
         </field>
     </record>
 
-    <menuitem id="menu_purchase_request_root" parent="purchase.menu_purchase_root" name="Purchase Requests" sequence="7" />
 
-    <menuitem id="menu_purchase_request" name="All Requests" parent="menu_purchase_request_root" />
-<!--    action="action_purchase_request"-->
-</odoo>
+<!--    the action-->
+
+        <record id="purchase_request_action" model="ir.actions.act_window">
+            <field name="name">Purchase Requests</field>
+            <field name="res_model">purchase.request</field>
+            <field name="view_mode">list,form</field>
+<!--            <field name="view_id" ref="view_purchase_request_list"/>-->
+        </record>
+ </odoo>

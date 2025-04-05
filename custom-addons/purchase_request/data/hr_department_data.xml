@@ -1,0 +1,5 @@
+<odoo>
+    <record id="department_procurement" model="hr.department">
+        <field name="name">Procurement</field>
+    </record>
+</odoo>
