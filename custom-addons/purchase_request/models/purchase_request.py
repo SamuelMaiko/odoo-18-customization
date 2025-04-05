@@ -34,7 +34,7 @@ class PurchaseRequest(models.Model):
 
     def create_rfq(self):
         purchase_order = self.env['purchase.order'].create({
-            'partner_id': self.env.ref('base.main_company').id,
+            'partner_id': False,
             'date_order': fields.Date.today(),
             'state': 'draft',
             'origin': self.name,
@@ -49,4 +49,6 @@ class PurchaseRequest(models.Model):
                 'price_unit': request_line.unit_price,
                 'name': request_line.product_id.name,
             })
+        # recording the rfq created as related to this request
+        self.write({'rfq_id': purchase_order.id})
 
