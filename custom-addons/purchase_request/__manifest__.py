@@ -3,6 +3,7 @@
     'version': '1.0',
     'category': 'Purchases',
     'summary': 'Employee Purchase Requests for Procurement',
+    'author': 'Samuel Maiko',
     'depends': ['base','purchase', 'hr'],
     'data': [
         "data/hr_department_data.xml",
@@ -12,4 +13,5 @@
     ],
     'installable': True,
     'application': True,
+    'license': 'LGPL-3',
 }
