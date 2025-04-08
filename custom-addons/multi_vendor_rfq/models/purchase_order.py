@@ -8,5 +8,3 @@ class PurchaseOrder(models.Model):
     vendor_reference_ids = fields.One2many(
         'vendor.reference', 'purchase_order_id', string="Vendor References")
     bid_ids = fields.One2many('rfq.bid', 'rfq_id', string='Bids')
-
-    # vendor_ids = fields.Many2many('res.partner', string='Vendors', domain=[('supplier_rank', '>', 0)])

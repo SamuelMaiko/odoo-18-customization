@@ -9,20 +9,20 @@ class MailComposeMessage(models.TransientModel):
         active_model = self.env.context.get('active_model')
         active_id = self.env.context.get('active_id')
 
-        # Ensure active_id and model are correct before proceeding
+        # Ensuring the active_id and the model are correct
         if active_model == 'purchase.order' and active_id:
             order = self.env['purchase.order'].browse(active_id)
 
-            # For RFQ (state = 'draft' or 'sent'), populate all vendor emails
+            # means it is still an rfq
             if order.state in ['draft', 'sent']:
-                # Get all vendor email addresses (multiple vendors in RFQ)
+                # Getting all vendor's email addresses
                 partners = order.vendor_reference_ids.mapped('vendor_id').filtered(lambda p: p.email)
                 res['partner_ids'] = [(6, 0, partners.ids)]  # Multiple vendors for RFQ
 
-            # elif order.state == 'purchase'
+            # means it is a purchase order
             else:
-                # Get the selected vendor's email (single vendor for PO)
+                # getting the winning bidder's email stored in the partner id
                 if order.partner_id and order.partner_id.email:
-                    res['partner_ids'] = [(6, 0, [order.partner_id.id])]  # Single vendor for PO
+                    res['partner_ids'] = [(6, 0, [order.partner_id.id])]
 
         return res

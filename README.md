@@ -18,10 +18,10 @@ This project contains custom Odoo 18 modules for extending the Purchase workflow
     ```
 ## 📦 Folder Structure
 
-- `custom-addons` and `conf` folder - download from the archive of this repo
-- `odoo-18.0` - can be any name, the Odoo instance you downloaded above (from requirements above)
 
 ![My Image](readme-images/folder-structure.png)
+- `custom-addons` and `conf` folder - download from the archive of this repo
+- `odoo-18.0` - can be any name i.e from the Odoo instance you downloaded above (from requirements above)
 
 ## 🛠️ Setup Instructions
 With the requirements in 

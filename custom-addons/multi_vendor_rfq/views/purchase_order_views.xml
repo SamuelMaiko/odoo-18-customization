@@ -31,7 +31,7 @@
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
 
-            <!-- Add a new tab for Bids -->
+            <!-- Adding a new tab at the bottom for Bids -->
             <xpath expr="//sheet/notebook" position="inside">
                 <page string="Bids">
                     <field name="bid_ids">
