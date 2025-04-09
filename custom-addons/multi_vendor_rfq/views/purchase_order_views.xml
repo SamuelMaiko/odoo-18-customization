@@ -6,21 +6,16 @@
         <field name="arch" type="xml">
 
              <!-- Hiding the default partner_id field from the form -->
-            <xpath expr="//field[@name='partner_id']" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <xpath expr="//field[@name='partner_id']" position="replace">
             </xpath>
+<!--                <attribute name="invisible">1</attribute>-->
             <!-- Hiding the default partner_ref field from the form -->
-            <xpath expr="//field[@name='partner_ref']" position="attributes">
-                <attribute name="invisible">1</attribute>
+            <xpath expr="//field[@name='partner_ref']" position="replace">
             </xpath>
-
-            <xpath expr="//field[@name='date_order']" position="before">
-                <field name="vendor_reference_ids" widget="one2many_list" required="1">
-                    <list>
-                        <field name="vendor_id"/>
-                        <field name="reference"/>
-                    </list>
-                </field>
+            <xpath expr="//field[@name='currency_id']" position="before">
+                <group string="Vendors">
+                    <field name="vendor_reference_ids" required="1" nolabel="1" widget="many2many_tags"/>
+                </group>
             </xpath>
         </field>
     </record>
