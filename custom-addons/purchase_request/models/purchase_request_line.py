@@ -7,8 +7,11 @@ class PurchaseRequestLine(models.Model):
     request_id = fields.Many2one('purchase.request', string='Purchase Request', ondelete='cascade')
     product_id = fields.Many2one('product.product', string='Product', required=True)
     quantity = fields.Float(string='Quantity', required=True)
+    date_required = fields.Date(string='Date Needed')
+    description = fields.Text(string='Description')
     unit_price = fields.Float(string='Unit Price')
     total_price = fields.Float(string='Total Price', compute='_compute_total_price', store=True)
+    sequence = fields.Integer(string='Sequence', default=10)
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
@@ -19,3 +22,10 @@ class PurchaseRequestLine(models.Model):
     def _compute_total_price(self):
         for line in self:
             line.total_price = line.quantity * line.unit_price
+
+    @api.onchange('product_id')
+    def _onchange_product_id(self):
+        for line in self:
+            if line.product_id:
+                line.description = line.product_id.name
+

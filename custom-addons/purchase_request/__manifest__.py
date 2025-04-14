@@ -7,6 +7,7 @@
     'depends': ['base','purchase', 'hr'],
     'data': [
         "data/hr_department_data.xml",
+        'data/purchase_request_sequence.xml',
         "views/purchase_request_views.xml",
         "security/group_procurement_approver.xml",
         "security/ir.model.access.csv",

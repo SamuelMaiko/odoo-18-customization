@@ -1,12 +1,14 @@
 from odoo import models, fields, api, _
 from odoo.exceptions import AccessError
+from odoo.exceptions import ValidationError
 
 
 class PurchaseRequest(models.Model):
     _name = 'purchase.request'
+    _inherit = ['mail.thread']
     _description = 'Purchase Request'
 
-    name = fields.Char(string='Request Name', required=True, copy=False, readonly=True, default=lambda self: _('New'))
+    name = fields.Char(string="Reference", required=True, copy=False, readonly=True, index=True, default='New')
     employee_id = fields.Many2one('hr.employee', string='Employee', required=True)
     department_id = fields.Many2one('hr.department', string='Department', related='employee_id.department_id',
                                     readonly=True)
@@ -16,9 +18,16 @@ class PurchaseRequest(models.Model):
         ('draft', 'Draft'),
         ('approved', 'Approved'),
         ('rejected', 'Rejected')
-    ], string='Status', default='draft')
+    ], string='Status', default='draft', tracking=True)
 
     rfq_id = fields.Many2one('purchase.order', string='Related RFQ', readonly=True)
+
+
+    @api.model
+    def create(self, vals):
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request') or 'New'
+        return super(PurchaseRequest, self).create(vals)
 
     # Actions
     def action_approve(self):
@@ -52,3 +61,18 @@ class PurchaseRequest(models.Model):
         # recording the rfq created as related to this request
         self.write({'rfq_id': purchase_order.id})
 
+    @api.constrains('product_ids')
+    def _check_product_ids(self):
+        for rec in self:
+            if not rec.product_ids:
+                raise ValidationError("At least one product must be requested.")
+
+    # @api.model
+    # def create(self, vals):
+    #     purchase_request = super(PurchaseRequest, self).create(vals)
+    #
+    #     # Add the employee as a follower
+    #     if purchase_request.employee_id:
+    #         purchase_request.message_subscribe([purchase_request.employee_id.user_id.id])
+    #
+    #     return purchase_request
