@@ -1,0 +1,19 @@
+<odoo>
+    <data>
+        <!-- Rule to show only own purchase requests for non-procurement users -->
+        <record id="purchase_request_own_only_rule" model="ir.rule">
+            <field name="name">Own Purchase Requests Only</field>
+            <field name="model_id" ref="model_purchase_request"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Rule to show all purchase requests for procurement users -->
+        <record id="purchase_request_procurement_all_rule" model="ir.rule">
+            <field name="name">All Purchase Requests for Procurement</field>
+            <field name="model_id" ref="model_purchase_request"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('purchase_request.group_procurement_approver'))]"/>
+        </record>
+    </data>
+</odoo>

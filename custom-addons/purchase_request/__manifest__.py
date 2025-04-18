@@ -10,6 +10,7 @@
         'data/purchase_request_sequence.xml',
         "views/purchase_request_views.xml",
         "security/group_procurement_approver.xml",
+        'security/purchase_request_record_rules.xml',
         "security/ir.model.access.csv",
     ],
     'installable': True,

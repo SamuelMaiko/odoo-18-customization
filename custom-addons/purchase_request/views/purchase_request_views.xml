@@ -5,11 +5,17 @@
                 parent="purchase.menu_purchase_root"
                 name="Purchase Requests"
                 sequence="6"
-                action="purchase_request_action"
                 groups="base.group_user"
+                action="action_purchase_request"
         />
+<!--        action -->
+        <record id="action_purchase_request" model="ir.actions.act_window">
+            <field name="name">Purchase Requests</field>
+            <field name="res_model">purchase.request</field>
+            <field name="view_mode">list,form,kanban</field>
+        </record>
 
-<!--        the list view -->
+<!--     the list view -->
         <record id="view_purchase_request_list" model="ir.ui.view">
             <field name="name">purchase.request.list</field>
             <field name="model">purchase.request</field>
@@ -18,77 +24,149 @@
                     <field name="name"/>
                     <field name="employee_id"/>
                     <field name="department_id"/>
-                    <field name="date_requested"/>
-                    <field name="state"/>
+                    <field name="date_requested" width="130%" />
+                    <field name="state"
+                           widget="badge"
+                           optional="show"
+                           decoration-success="state == 'approved'"
+                           decoration-warning="state == 'rejected'"
+                           decoration-info="state == 'draft'"/>
                 </list>
             </field>
         </record>
+<!--    kanban view -->
+        <record id="view_purchase_request_kanban" model="ir.ui.view">
+            <field name="name">purchase.request.kanban</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_small_column">
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="product_ids"/>
+                    <field name="date_requested"/>
+                    <field name="employee_id"/>
+
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click p-2">
+                                <!-- Reference and Date -->
+                                <div class="d-flex mt-2 justify-content-between">
+                                    <strong><field name="name"/></strong>
+                                    <span>
+                                        <i class="fa fa-calendar me-1"/> <field name="date_requested"/>
+                                    </span>
+                                </div>
+
+                                <!--  Employee and Product Count -->
+                                <div class="d-flex justify-content-between mt-2">
+                                    <div>
+                                        <i class="fa fa-user me-1"/> <field name="employee_id"/>
+                                    </div>
+                                    <div>
+                                        <i class="fa fa-cube me-1"/>
+                                        <span t-esc="record.product_ids.raw_value.length"/> Products
+                                    </div>
+                                </div>
+
+                                <!-- Status Badge  -->
+                                <t t-set="state_color" t-value="{
+                                    'draft': 'bg-info',
+                                    'approved': 'bg-success',
+                                    'rejected': 'bg-warning'
+                                }[record.state.raw_value]"/>
+
+                                <div class="text-start mt-3">
+                                    <span class="badge text-white px-3 py-1" t-attf-class="{{ state_color }}">
+                                        <t t-esc="record.state.value"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </t>
+
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
 
 <!--    the form view -->
+        <record id="view_purchase_request_form" model="ir.ui.view">
+            <field name="name">purchase.request.form</field>
+            <field name="model">purchase.request</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Request">
+                    <header>
+                        <button name="action_create_rfq"
+                                type="object"
+                                string="Create RFQ"
+                                class="btn btn-primary"
+                                groups="purchase_request.group_procurement_approver"
+                                invisible="rfq_id"/>
 
-    <record id="view_purchase_request_form" model="ir.ui.view">
-        <field name="name">purchase.request.form</field>
-        <field name="model">purchase.request</field>
-        <field name="arch" type="xml">
-            <form string="Purchase Request">
-                <header>
-                    <button name="action_approve"
-                            type="object"
-                            string="Approve"
-                            class="btn btn-primary"
-                            groups="purchase_request.group_procurement_approver"
-                            invisible="state != 'draft'"/>
-                    <button name="action_reject"
-                            type="object"
-                            string="Reject"
-                            class="btn btn-danger"
-                            groups="purchase_request.group_procurement_approver"
-                            invisible="state != 'draft'"/>
-                    <button string="Cancel"
-                            class="btn btn-secondary"
-                            groups="purchase_request.group_procurement_approver"
-                            special="cancel"/>
+                        <button name="action_update_related_rfq"
+                                type="object"
+                                string="Update RFQ"
+                                class="btn btn-primary"
+                                groups="purchase_request.group_procurement_approver"
+                                invisible="not rfq_id"/>
+                        <button name="action_reject"
+                                type="object"
+                                string="Reject"
+                                class="btn btn-danger"
+                                groups="purchase_request.group_procurement_approver"
+                                invisible="state != 'draft'"/>
+<!--                        <button string="Cancel"-->
+<!--                                class="btn btn-secondary"-->
+<!--                                groups="purchase_request.group_procurement_approver"-->
+<!--                                special="cancel"/>-->
 
-                    <field name="state"
-                           widget="statusbar"
-                           statusbar_visible="draft,approved,rejected"
-                           readonly="1"/>
-                </header>
-                <sheet>
-                    <group>
-                        <field name="name"/>
-                        <field name="employee_id"/>
-                        <field name="department_id" readonly="1"/>
-                        <field name="date_requested"/>
-                        <field name="rfq_id" widget="many2one" options="{'no_create': True}" string="Related RFQ"/>
-                    </group>
+                        <field name="state"
+                               widget="statusbar"
+                               statusbar_visible="draft,approved,rejected"
+                               readonly="1"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="employee_id"/>
+                            <field name="department_id" readonly="1"/>
+                            <field name="date_requested"/>
+                            <field name="rfq_id" widget="many2one" options="{'no_create': True}" string="Related RFQ"/>
+                        </group>
 
-                    <notebook>
-                        <page string="Products">
-                            <field name="product_ids">
-                                <list editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="product_id"/>
-                                    <field name="quantity"/>
-                                    <field name="date_required"/>
-                                    <field name="description"/>
-                                </list>
-                            </field>
-                        </page>
-                    </notebook>
-                </sheet>
-                <chatter/>
-            </form>
-        </field>
-    </record>
-
-
-<!--    the action-->
-
-        <record id="purchase_request_action" model="ir.actions.act_window">
-            <field name="name">Purchase Requests</field>
-            <field name="res_model">purchase.request</field>
-            <field name="view_mode">list,form</field>
-<!--            <field name="view_id" ref="view_purchase_request_list"/>-->
+                        <notebook>
+                            <page string="Products">
+                                <field name="product_ids">
+                                    <list editable="bottom">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="product_id"/>
+                                        <field name="quantity" />
+                                        <field name="state"
+                                           widget="badge"
+                                           optional="show"
+                                           decoration-success="state == 'approved'"
+                                           decoration-danger="state == 'rejected'"
+                                           decoration-info="state == 'draft'"/>
+                                        <field name="date_required" width="90%"/>
+                                        <button name="approve_line"
+                                                type="object"
+                                                string="Approve"
+                                                invisible="state == 'approved'"
+                                                groups="purchase_request.group_procurement_approver"
+                                                class="btn btn-primary "/>
+                                        <button name="reject_line"
+                                                type="object"
+                                                string="Reject"
+                                                invisible="state == 'rejected'"
+                                                groups="purchase_request.group_procurement_approver"
+                                                class="btn btn-secondary text-black ml-2"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
         </record>
  </odoo>

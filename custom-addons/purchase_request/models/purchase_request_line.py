@@ -9,9 +9,23 @@ class PurchaseRequestLine(models.Model):
     quantity = fields.Float(string='Quantity', required=True)
     date_required = fields.Date(string='Date Needed')
     description = fields.Text(string='Description')
-    unit_price = fields.Float(string='Unit Price')
-    total_price = fields.Float(string='Total Price', compute='_compute_total_price', store=True)
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected')
+    ], string='Status', default='draft')
+    # unit_price = fields.Float(string='Unit Price')
+    # total_price = fields.Float(string='Total Price', compute='_compute_total_price', store=True)
     sequence = fields.Integer(string='Sequence', default=10)
+
+    # actions
+    def approve_line(self):
+        for line in self:
+            line.state = 'approved'
+
+    def reject_line(self):
+        for line in self:
+            line.state = 'rejected'
 
     @api.onchange('product_id')
     def _onchange_product_id(self):
