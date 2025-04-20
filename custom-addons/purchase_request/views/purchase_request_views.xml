@@ -136,7 +136,9 @@
 
                         <notebook>
                             <page string="Products">
-                                <field name="product_ids">
+
+                                <field name="product_ids"
+                                       readonly="can_edit_lines == False">
                                     <list editable="bottom">
                                         <field name="sequence" widget="handle"/>
                                         <field name="product_id"/>

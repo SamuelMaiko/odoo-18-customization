@@ -22,6 +22,14 @@ class PurchaseRequest(models.Model):
 
     rfq_id = fields.Many2one('purchase.order', string='Related RFQ', readonly=True)
     has_approved_product = fields.Boolean(compute='_compute_has_approved_product', store=False)
+    can_edit_lines = fields.Boolean(compute="_compute_can_edit_lines")
+
+    def _compute_can_edit_lines(self):
+        for record in self:
+            record.can_edit_lines = (
+                    record.state != 'approved'
+                    or self.env.user.has_group('purchase_request.group_procurement_approver')
+            )
 
     @api.depends('product_ids.state')
     def _compute_has_approved_product(self):
@@ -109,6 +117,6 @@ class PurchaseRequest(models.Model):
 
 
 # TO DO
-# prevent the requesters from editing after approved
+# prevent the requesters from editing after approved - Done
 # look at api.model ...... methods
 # guiding messages
