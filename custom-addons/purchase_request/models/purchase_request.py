@@ -31,6 +31,7 @@ class PurchaseRequest(models.Model):
                     or self.env.user.has_group('purchase_request.group_procurement_approver')
             )
 
+
     @api.depends('product_ids.state')
     def _compute_has_approved_product(self):
         for rec in self:
@@ -41,6 +42,7 @@ class PurchaseRequest(models.Model):
     def create(self, vals):
         if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('purchase.request') or 'New'
+        print(self.can_edit_lines)
         return super(PurchaseRequest, self).create(vals)
 
     @api.model
