@@ -1,0 +1,11 @@
+<odoo>
+    <!-- Stage 1 Approval Group -->
+    <record id="stage_1_approval_group" model="res.groups">
+        <field name="name">Stage 1 Approval</field>
+    </record>
+
+    <!-- Stage 2 Approval Group -->
+    <record id="stage_2_approval_group" model="res.groups">
+        <field name="name">Stage 2 Approval</field>
+    </record>
+</odoo>

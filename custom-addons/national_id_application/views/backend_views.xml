@@ -1,0 +1,87 @@
+<odoo>
+<!--actions-->
+    <record id="action_national_id_applications" model="ir.actions.act_window">
+        <field name="name">National ID Applications</field>
+        <field name="res_model">national.id.application</field>
+        <field name="view_mode">list,form</field>
+    </record>
+<!--<field name="target">current</field>-->
+
+
+<!--menu items-->
+    <menuitem name="National ID Applications"
+              id="menu_national_id_applications_root"
+              groups="national_id_application.stage_1_approval_group,national_id_application.stage_2_approval_group"
+              sequence="138"/>
+
+    <menuitem name="Applications"
+              id="menu_national_id_applications"
+              parent="menu_national_id_applications_root"
+              action="action_national_id_applications"
+              sequence="1"/>
+
+<!--    list view-->
+    <record id="view_national_id_application_tree" model="ir.ui.view">
+        <field name="name">national.id.application.list</field>
+        <field name="model">national.id.application</field>
+        <field name="arch" type="xml">
+            <list string="National ID Applications" >
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="email"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-danger="state == 'rejected'"
+                       decoration-info="state == 'stage1'"
+                       decoration-warning="state == 'stage2'"/>
+            </list>
+        </field>
+    </record>
+
+<!--    form view-->
+    <record id="view_national_id_application_form" model="ir.ui.view">
+        <field name="name">national.id.application.form</field>
+        <field name="model">national.id.application</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve_stage_1"
+                            type="object"
+                            groups="national_id_application.stage_1_approval_group"
+                            string="Approve Stage 1"
+                            invisible="state != 'stage1'"/>
+                    <button name="action_approve_stage_2"
+                            type="object"
+                            groups="national_id_application.stage_2_approval_group"
+                            string="Approve Stage 2"
+                            class="btn btn-primary"
+                            invisible="state == 'approved'"/>
+                    <button name="action_reject"
+                            type="object"
+                            string="Reject application"
+                            groups="national_id_application.stage_1_approval_group,national_id_application.stage_2_approval_group"
+                            invisible="not can_reject_or_approve or state == 'rejected'"/>
+<!--                            class="btn btn-danger"-->
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="stage1,stage2,approved,rejected"
+                           readonly="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="picture" widget="image"/>
+                        <field name="name"/>
+                        <field name="date_of_birth"/>
+                        <field name="place_of_birth"/>
+                        <field name="email"/>
+                        <field name="phone"/>
+                        <field name="application_date" readonly="1"/>
+                        <field name="lc_reference_letter" widget="binary"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

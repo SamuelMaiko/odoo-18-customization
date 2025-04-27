@@ -1,0 +1,57 @@
+<odoo>
+    <template id="apply_form_template" name="National ID Application Form" inherit_id="website.layout">
+        <xpath expr="//header" position="replace">
+            <div></div>
+        </xpath>
+        <xpath expr="//footer" position="replace">
+            <div></div>
+        </xpath>
+        <xpath expr="//main" position="replace">
+            <section class="container">
+                <h1 class="text-center fs-2 text-primary">Apply for a National ID</h1>
+                <form class="w-75 mx-auto p-4" action="/national-id/submit" method="post" enctype="multipart/form-data">
+                    <!--csrf token-->
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <!--form fields-->
+                    <label for="name" class="mb-1 fs-5 ">Full Name</label><br/>
+                    <input type="text"
+                           class="w-100 ps-4 fs-5 p-3 focus:outline-none form-control"
+                           name="name"
+                           id="name"
+                           placeholder="Full Name"
+                           required="required"/><br/>
+                    <div class="d-flex justify-content-between">
+                        <div class="flex-fill">
+
+                    <label for="phone" class="mb-1 fs-5 ">Phone</label><br/>
+                    <input type="text" class="w-75 ps-4 fs-5 p-3 focus:outline-none form-control" name="phone" id="phone" placeholder="Phone Number" /><br/>
+
+                    <label for="date_of_birth" class="mb-1 fs-5 ">Date of Birth</label><br/>
+                    <input type="date" class="w-75 ps-4 fs-5 p-3 focus:outline-none form-control" name="date_of_birth" id="date_of_birth" placeholder="Date of Birth" required="required"/><br/>
+
+                            <label class="mb-1 fs-5 ">Picture</label><br/>
+                    <input type="file" class="w-75 ps-4 fs-5 p-1 focus:outline-none form-control" name="picture" accept="image/*" /><br/>
+
+                    <label class="mb-1 fs-5 ">LC reference letter</label><br/>
+                    <input type="file" class="w-75 ps-4 fs-5 p-1 focus:outline-none form-control" name="lc_letter" accept=".pdf,.jpg,.png" /><br/><br/>
+                    <button type="submit" class="px-4 py-3 text-white fs-5 bg-success shadow border-0">Submit Application</button><br/><br/>
+
+                        </div>
+                        <div class="flex-fill">
+
+
+                    <label for="email" class="mb-1 fs-5 ">Email</label><br/>
+                    <input type="email" class="w-100 ps-4 fs-5 p-3 focus:outline-none form-control" name="email" id="email" placeholder="Email Address" /><br/>
+
+                    <label for="place_of_birth" class="mb-1 fs-5 ">Place of Birth</label><br/>
+                    <input type="text" class="w-100 ps-4 fs-5 p-3 focus:outline-none form-control" name="place_of_birth" id="place_of_birth" placeholder="Place of Birth" required="required"/><br/>
+
+
+                        </div>
+                    </div>
+
+                </form>
+            </section>
+         </xpath>
+    </template>
+</odoo>

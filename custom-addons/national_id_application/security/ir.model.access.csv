@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_national_id_application_stage_1,national.id.application.stage_1,model_national_id_application,stage_1_approval_group,1,1,1,0
+access_national_id_application_stage_2,national.id.application.stage_2,model_national_id_application,stage_2_approval_group,1,1,1,0
