@@ -1,0 +1,19 @@
+{
+  "folders": [
+    { "path": "../../odoo-18.0/" },
+    { "path": "." }
+  ],
+  "settings": {
+    "search.exclude": {
+      "**/venv/**": true,
+      "**/__pycache__/**": true,
+      "**/.git/**": true
+    },
+    "files.exclude": {
+      "**/venv/**": true,
+      "**/__pycache__/**": true,
+      "**/.git/**": true
+    }
+  }
+}
+
